@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BiblioShey - Tu Biblioteca Digital</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #333; overflow-x: hidden; }
+
+    /* Header */
+    .header { background: linear-gradient(135deg, #FF6B35, #F7931E); color: white; padding: 15px 0; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.1); }
+    .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
+    .logo { font-size: 2rem; font-weight: bold; text-decoration: none; color: white; display: flex; align-items: center; gap: 10px; }
+    .logo i { font-size: 2.2rem; }
+    .nav-menu { display: flex; list-style: none; gap: 30px; }
+    .nav-menu a { color: white; text-decoration: none; font-weight: 500; transition: all 0.3s ease; padding: 10px 15px; border-radius: 25px; }
+    .nav-menu a:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
+    .mobile-menu { display: none; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
+
+    /* Announcement Banner */
+    .announcement { background: linear-gradient(45deg, #4A90E2, #7B68EE); color: white; text-align: center; padding: 12px; font-weight: 500; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
+
+    /* Hero */
+    .hero { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 80px 20px; text-align: center; color: white; position: relative; overflow: hidden; }
+    .hero-content { max-width: 800px; margin: 0 auto; position: relative; z-index: 2; }
+    .hero h1 { font-size: 3.5rem; margin-bottom: 20px; }
+    .hero p { font-size: 1.3rem; margin-bottom: 30px; }
+    .search-container { max-width: 600px; margin: 0 auto; position: relative; }
+    .search-box { width: 100%; padding: 15px 60px 15px 20px; border: none; border-radius: 50px; font-size: 1.1rem; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+    .search-btn { position: absolute; right: 5px; top: 5px; bottom: 5px; background: linear-gradient(135deg, #FF6B35, #F7931E); border: none; border-radius: 50px; color: white; padding: 0 25px; cursor: pointer; transition: all 0.3s ease; }
+    .search-btn:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+
+    /* Categories */
+    .categories { padding: 80px 20px; background: #f8f9fa; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 50px; color: #333; position: relative; }
+    .section-title::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 80px; height: 4px; background: linear-gradient(135deg, #FF6B35, #F7931E); border-radius: 2px; }
+    .category-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 50px; }
+    .category-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: all 0.3s ease; cursor: pointer; position: relative; }
+    .category-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
+    .category-image { height: 200px; background-size: cover; background-position: center; position: relative; }
+    .category-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(255,107,53,0.8), rgba(247,147,30,0.8)); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem; }
+    .category-content { padding: 25px; text-align: center; }
+
+    /* Featured Books */
+    .featured-books { padding: 80px 20px; background: white; }
+    .books-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px; margin-top: 50px; }
+    .book-card { background: white; border-radius: 15px; padding: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); transition: all 0.3s ease; text-align: center; }
+    .book-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.15); }
+    .book-placeholder { width: 100%; height: 250px; margin-bottom: 15px; border-radius: 10px; overflow: hidden; }
+    .book-placeholder img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; }
+    .book-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 8px; color: #333; }
+    .book-author { color: #666; font-size: 0.9rem; margin-bottom: 15px; }
+    .book-btn { background: linear-gradient(135deg, #FF6B35, #F7931E); color: white; border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: inline-block; }
+    .book-btn:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+
+    /* Contact */
+    .contact { background: linear-gradient(135deg, #667eea, #764ba2); padding: 80px 20px; color: white; text-align: center; }
+    .contact-info { display: flex; justify-content: center; gap: 40px; margin-top: 30px; flex-wrap: wrap; }
+    .contact-item { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .contact-item i { font-size: 2rem; color: #FF6B35; }
+    .whatsapp-btn { background: #25D366; color: white; padding: 15px 30px; border-radius: 50px; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; margin-top: 30px; transition: all 0.3s ease; font-weight: bold; }
+    .whatsapp-btn:hover { background: #128C7E; transform: scale(1.05); }
+
+    /* Footer */
+    .footer { background: #333; color: white; text-align: center; padding: 30px 20px; }
+
+    /* 🔹 Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0; top: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      justify-content: center; align-items: center;
+      padding: 20px;
+    }
+    .modal.show { display: flex; }
+    .modal-content {
+      background: white;
+      border-radius: 15px;
+      max-width: 800px;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      position: relative;
+    }
+    .modal-left { flex: 1 1 40%; background: #f4f6fa; }
+    .modal-left img { width: 100%; height: 100%; object-fit: cover; }
+    .modal-right { flex: 1 1 60%; padding: 20px; }
+    .modal-title { font-size: 1.5rem; font-weight: bold; margin-bottom: 10px; }
+    .modal-author { font-size: 1rem; color: #666; margin-bottom: 10px; }
+    .modal-rating { margin-bottom: 10px; color: #facc15; font-size: 1.2rem; }
+    .modal-downloads { font-size: 0.9rem; color: #444; margin-bottom: 20px; }
+    .modal-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .modal-btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+    }
+    .read-btn { background: #3b82f6; color: white; }
+    .read-btn:hover { background: #2563eb; }
+    .download-btn { background: #10b981; color: white; }
+    .download-btn:hover { background: #059669; }
+    .favorite-btn { background: #f43f5e; color: white; }
+    .favorite-btn:hover { background: #e11d48; }
+    .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #666; }
+    .close-modal:hover { color: #000; }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="nav-container">
+      <a href="#" class="logo"><i class="fas fa-book-open"></i>BiblioShey</a>
+      <nav>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="#inicio">Inicio</a></li>
+          <li><a href="#libros">Libros</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+        <button class="mobile-menu" id="mobileMenu"><i class="fas fa-bars"></i></button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Announcement Banner -->
+  <div class="announcement">¡DONDE HAY LIBROS, HAY MAGIA! SUMÉRGETE EN LA MAGIA DE LA LECTURA</div>
+
+  <!-- Hero -->
+  <section id="inicio" class="hero">
+    <div class="hero-content">
+      <h1>Bienvenido a BiblioShey</h1>
+      <p>Tu biblioteca digital donde cada libro es una nueva aventura</p>
+      <div class="search-container">
+        <input type="text" class="search-box" placeholder="Buscar libros..." id="searchInput">
+        <button class="search-btn" onclick="searchBooks()"><i class="fas fa-search"></i></button>
+      </div>
+    </div>
+  </section>
+
+  
+  <!-- Featured Books -->
+  <section id="libros" class="featured-books">
+    <div class="container">
+      <h2 class="section-title"><i class="fas fa-star"></i> Libros Destacados</h2>
+      <div class="loading" id="loading"><p>Cargando libros...</p></div>
+      <div class="books-grid" id="booksGrid"></div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contacto" class="contact">
+    <div class="container">
+      <h2 class="section-title" style="color: white;">Contáctanos</h2>
+      <p>¿Tienes alguna pregunta o sugerencia? ¡Nos encantaría escucharte!</p>
+      <div class="contact-info">
+        <div class="contact-item"><i class="fas fa-user"></i><span>Desarrollado por</span><strong>Sheynner Zavala</strong></div>
+        <div class="contact-item"><i class="fas fa-envelope"></i><span>Email</span><strong>zavalasheynner@gmail.com</strong></div>
+        <div class="contact-item"><i class="fas fa-phone"></i><span>Teléfono</span><strong>978 110 873</strong></div>
+      </div>
+      <a href="https://wa.me/51978110873?text=Hola,%20me%20interesa%20conocer%20más%20sobre%20BiblioShey" target="_blank" class="whatsapp-btn"><i class="fab fa-whatsapp"></i> Contáctanos por WhatsApp</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer"><div class="container"><p>&copy; 2025 BiblioShey - Desarrollado por Sheynner Zavala. Todos los derechos reservados.</p></div></footer>
+
+  <!-- Modal -->
+  <div id="bookModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <div class="modal-left">
+        <img class="modal-cover" src="" alt="Portada del libro">
+      </div>
+      <div class="modal-right">
+        <h2 class="modal-title"></h2>
+        <p class="modal-author"></p>
+        <div class="modal-rating"></div>
+        <p class="modal-downloads"></p>
+        <div class="modal-actions">
+          <button class="modal-btn read-btn"><i class="fas fa-book-open"></i> Leer</button>
+          <button class="modal-btn download-btn"><i class="fas fa-download"></i> Descargar</button>
+          <button class="modal-btn favorite-btn" id="modalFavoriteBtn"><i class="far fa-heart"></i> Favorito</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sampleBooks = [
+      { title: "El Señor de los Anillos", author: "J.R.R. Tolkien", category: "ficcion", image: "img/1.jpg", rating: 5, downloads: 1200 },
+      { title: "Cien Años de Soledad", author: "Gabriel García Márquez", category: "ficcion", image: "img/2.jpg", rating: 5, downloads: 980 },
+      { title: "Harry Potter", author: "J.K. Rowling", category: "juvenil", image: "img/3.png", rating: 4, downloads: 1500 },
+      { title: "El Principito", author: "Antoine de Saint-Exupéry", category: "juvenil", image: "img/4.png", rating: 5, downloads: 850 },
+      { title: "Física Cuántica", author: "Dr. María López", category: "academico", image: "img/5.jpg", rating: 3, downloads: 420 },
+      { title: "Steve Jobs", author: "Walter Isaacson", category: "biografia", image: "img/6.jpg", rating: 4, downloads: 610 },
+      { title: "Cosmos", author: "Carl Sagan", category: "ciencia", image: "img/7.jpg", rating: 5, downloads: 760 },
+      { title: "Historia del Arte", author: "Ernst Gombrich", category: "arte", image: "img/8.png", rating: 4, downloads: 500 }
+    ];
+    let allBooks = [...sampleBooks];
+
+    function loadBooks(books = allBooks) {
+      const booksGrid = document.getElementById('booksGrid');
+      const loading = document.getElementById('loading');
+      loading.style.display = 'block';
+      booksGrid.innerHTML = '';
+      setTimeout(() => {
+        loading.style.display = 'none';
+        books.forEach(book => {
+          const bookCard = document.createElement('div');
+          bookCard.className = 'book-card';
+          bookCard.innerHTML = `
+            <div class="book-placeholder">
+              <img src="${book.image}" alt="${book.title}">
+            </div>
+            <div class="book-title">${book.title}</div>
+            <div class="book-author">por ${book.author}</div>
+            <button class="book-btn" onclick="viewBook('${book.title}')"><i class="fas fa-eye"></i> Ver Libro</button>
+          `;
+          booksGrid.appendChild(bookCard);
+        });
+      }, 1000);
+    }
+
+    function searchBooks() {
+      const q = document.getElementById('searchInput').value.toLowerCase().trim();
+      const filtered = allBooks.filter(b => b.title.toLowerCase().includes(q) || b.author.toLowerCase().includes(q) || b.category.toLowerCase().includes(q));
+      loadBooks(filtered);
+    }
+
+    // 🔹 Modal Logic
+    const modal = document.getElementById('bookModal');
+    const modalCover = document.querySelector('.modal-cover');
+    const modalTitle = document.querySelector('.modal-title');
+    const modalAuthor = document.querySelector('.modal-author');
+    const modalRating = document.querySelector('.modal-rating');
+    const modalDownloads = document.querySelector('.modal-downloads');
+    const closeModalBtn = document.querySelector('.close-modal');
+    const favoriteBtn = document.getElementById('modalFavoriteBtn');
+
+    function viewBook(title) {
+      const book = allBooks.find(b => b.title === title);
+      if (!book) return;
+
+      modalCover.src = book.image;
+      modalTitle.textContent = book.title;
+      modalAuthor.textContent = "por " + book.author;
+      modalRating.innerHTML = "⭐".repeat(book.rating) + "☆".repeat(5 - book.rating);
+      modalDownloads.textContent = `📥 ${book.downloads} descargas`;
+
+      modal.classList.add('show');
+    }
+
+    closeModalBtn.addEventListener('click', () => modal.classList.remove('show'));
+    modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('show'); });
+
+    favoriteBtn.addEventListener('click', () => {
+      if (favoriteBtn.classList.contains('active')) {
+        favoriteBtn.classList.remove('active');
+        favoriteBtn.innerHTML = '<i class="far fa-heart"></i> Favorito';
+      } else {
+        favoriteBtn.classList.add('active');
+        favoriteBtn.innerHTML = '<i class="fas fa-heart"></i> Favorito';
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => loadBooks());
+  </script>
+</body>
+</html>
